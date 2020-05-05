@@ -14,6 +14,7 @@ void set_callbacks()
     glutReshapeFunc(reshape);
     glutMouseFunc(mouse);
     glutMotionFunc(motion);
+	glutPassiveMotionFunc(motion);
     glutKeyboardFunc(keyboard);
     glutKeyboardUpFunc(keyboard_up);
     glutIdleFunc(idle);
