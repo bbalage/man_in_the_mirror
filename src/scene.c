@@ -5,26 +5,32 @@
 #include <obj/load.h>
 #include <obj/draw.h>
 
+void init_models(Scene* scene){
+	Object *obj = &scene->olist;
+	load_model(&(obj->model), "wall.obj");
+	obj->texture_id = load_texture("brick3.jpg");
+	
+	glBindTexture(GL_TEXTURE_2D, obj->texture_id);
+	
+	obj->material.ambient.red = 0.5;
+    obj->material.ambient.green = 0.5;
+    obj->material.ambient.blue = 0.5;
+
+    obj->material.diffuse.red = 0.5;
+    obj->material.diffuse.green = 0.5;
+    obj->material.diffuse.blue = 0.5;
+
+    obj->material.specular.red = 0.5;
+    obj->material.specular.green = 0.5;
+    obj->material.specular.blue = 0.5;
+	
+	obj->material.shininess = 100.0;
+	obj->next = NULL;
+}
+
 void init_scene(Scene* scene)
 {
-    load_model(&(scene->cube), "cube.obj");
-    //scene->texture_id = load_texture("cube.png"); 
-
-    glBindTexture(GL_TEXTURE_2D, scene->texture_id);
-
-    scene->material.ambient.red = 1.0;
-    scene->material.ambient.green = 0.0;
-    scene->material.ambient.blue = 1.0;
-
-    scene->material.diffuse.red = 1.0;
-    scene->material.diffuse.green = 0.0;
-    scene->material.diffuse.blue = 1.0;
-
-    scene->material.specular.red = 1.0;
-    scene->material.specular.green = 1.0;
-    scene->material.specular.blue = 1.0;
-
-    scene->material.shininess = 100.0;
+    init_models(scene);
 }
 
 void set_lighting()
@@ -32,7 +38,7 @@ void set_lighting()
     float ambient_light[] = { 0.5f, 0.5f, 0.5f, 0.5f };
     float diffuse_light[] = { 0.5f, 0.5f, 0.5, 0.5f };
     float specular_light[] = { 0.5f, 0.5f, 0.5f, 0.5f };
-    float position[] = { 0.0f, 0.0f, 10000.0f, 1.0f };
+    float position[] = { 0.0f, 0.0f, 10.0f, 1.0f };
 
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light);
@@ -69,10 +75,22 @@ void set_material(const Material* material)
 
 void draw_scene(const Scene* scene)
 {
-    set_material(&(scene->material));
     set_lighting();
     draw_origin();
-    draw_model(&(scene->cube));
+    draw_models(&(scene->olist));
+}
+
+void draw_models(const Object* olist){
+	Object *obj = olist;
+	glMatrixMode(GL_MODELVIEW);
+    //glLoadIdentity();
+	glRotatef(-90, 0, 1.0, 0);
+    glTranslatef(10,0,0);
+	while(obj != NULL){
+		set_material(&(obj->material));
+		draw_model(&(obj->model));
+		obj = obj->next;
+	}
 }
 
 void draw_origin()
@@ -94,3 +112,13 @@ void draw_origin()
     glEnd();
 }
 
+void move_model(Model* model, double xm, double ym, double zm)
+{
+    int i;
+    
+    for (i = 0; i < model->n_vertices; i++) {
+        model->vertices[i].x += xm;
+        model->vertices[i].y += ym;
+        model->vertices[i].z += zm;
+    }
+}

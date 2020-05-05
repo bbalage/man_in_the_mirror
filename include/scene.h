@@ -6,14 +6,22 @@
 
 #include <obj/model.h>
 
+typedef struct Object
+{
+	Model model;
+	Material material;
+	GLuint texture_id;
+	struct Object* next;
+} Object;
+
 typedef struct Scene
 {
     Camera camera;
-    Model cube;
-    Material material;
-    GLuint texture_id;
+    Object olist;
 } Scene;
 
+void init_models(Scene* scene);
+void draw_models(const Object* olist);
 /**
  * Initialize the scene by loading models.
  */
@@ -39,4 +47,9 @@ void draw_scene(const Scene* scene);
  */
 void draw_origin();
 
+
+/**
+ * Move the loaded model.
+ */
+void move_model(Model* model, double xm, double ym, double zm);
 #endif /* SCENE_H */
