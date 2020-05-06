@@ -5,45 +5,11 @@
 #include <obj/load.h>
 #include <obj/draw.h>
 
-void init_models(Scene* scene){
-	Object *obj = &scene->olist;
-	int i, j;
-	for(i = 0; i < 5; i++){
-		for(j = 0; j < 5; j++){
-			obj->next = malloc(sizeof(Object));
-			obj = obj->next;
-			load_model(&(obj->model), "models/wall.obj");
-			obj->texture_id = load_texture("textures/brick3.jpg");
-	
-			obj->pos.x = 0.1*j;
-			obj->pos.y = 0.1*i;
-			obj->pos.z = 0;
-			obj->rot.x = 0;
-			obj->rot.y = 0;
-			obj->rot.z = 0;
-			glBindTexture(GL_TEXTURE_2D, obj->texture_id);
-	
-			obj->material.ambient.red = 0.5;
-			obj->material.ambient.green = 0.5;
-			obj->material.ambient.blue = 0.5;
-
-			obj->material.diffuse.red = 0.5;
-			obj->material.diffuse.green = 0.5;
-			obj->material.diffuse.blue = 0.5;
-
-			obj->material.specular.red = 0.5;
-			obj->material.specular.green = 0.5;
-			obj->material.specular.blue = 0.5;
-	
-			obj->material.shininess = 100.0;
-		}
-	}
-	obj->next = NULL;
-}
-
 void init_scene(Scene* scene)
 {
-    init_models(scene);
+    scene->tex_wall = load_texture("textures/brick3.jpg");
+	scene->tex_floor = load_texture("textures/floor.jpeg");
+	init_models(scene);
 }
 
 void set_lighting()
@@ -98,18 +64,139 @@ void draw_models(const Object* olist){
 	glMatrixMode(GL_MODELVIEW);
     //glLoadIdentity();
 	while(obj != NULL){
+		glBindTexture(GL_TEXTURE_2D, obj->texture_id);
 		set_material(&(obj->material));
+		glTranslatef(obj->pos.x,obj->pos.y,obj->pos.z);
 		glRotatef(obj->rot.x, 1.0, 0, 0);
 		glRotatef(obj->rot.y, 0, 1.0, 0);
 		glRotatef(obj->rot.z, 0, 0, 1.0);
-		glTranslatef(obj->pos.x,obj->pos.y,obj->pos.z);
 		draw_model(&(obj->model));
-		glTranslatef(-obj->pos.x,-obj->pos.y,-obj->pos.z);
 		glRotatef(-obj->rot.z, 0, 0, 1.0);
 		glRotatef(-obj->rot.y, 0, 1.0, 0);
 		glRotatef(-obj->rot.x, 1.0, 0, 0);
+		glTranslatef(-obj->pos.x,-obj->pos.y,-obj->pos.z);
 		obj = obj->next;
 	}
+}
+
+void init_models(Scene* scene){
+	Object *obj = &scene->olist;
+	int i, j, k;
+	for(k = 0; k < 2; k++){
+		for(i = 0; i < 6; i++){
+			for(j = 0; j < 6; j++){
+				obj->next = malloc(sizeof(Object));
+				obj = obj->next;
+				load_model(&(obj->model), "models/wall.obj");
+				obj->texture_id = scene->tex_floor;
+				obj->pos.x = 0.1*j;
+				obj->pos.y = 0.1*i;
+				obj->pos.z = 0.1*k;
+				obj->rot.x = 0;
+				obj->rot.y = 0;
+				obj->rot.z = 0;	
+				obj->material.ambient.red = 0.6;
+				obj->material.ambient.green = 0.6;
+				obj->material.ambient.blue = 0.6;
+				obj->material.diffuse.red = 0.6;
+				obj->material.diffuse.green = 0.6;
+				obj->material.diffuse.blue = 0.6;
+				obj->material.specular.red = 0.6;
+				obj->material.specular.green = 0.6;
+				obj->material.specular.blue = 0.6;
+				obj->material.shininess = 100.0;
+			}
+		}
+	}
+	for(i = 0; i < 6; i++){
+		obj->next = malloc(sizeof(Object));
+		obj = obj->next;
+		load_model(&(obj->model), "models/wall.obj");
+		obj->texture_id = scene->tex_wall;
+		obj->pos.x = 0.1*i;
+		obj->pos.y = 0;
+		obj->pos.z = 0;
+		obj->rot.x = 90;
+		obj->rot.y = 0;
+		obj->rot.z = 0;
+		obj->material.ambient.red = 0.5;
+		obj->material.ambient.green = 0.5;
+		obj->material.ambient.blue = 0.5;
+		obj->material.diffuse.red = 0.5;
+		obj->material.diffuse.green = 0.5;
+		obj->material.diffuse.blue = 0.5;
+		obj->material.specular.red = 0.5;
+		obj->material.specular.green = 0.5;
+		obj->material.specular.blue = 0.5;
+		obj->material.shininess = 100.0;
+	}
+	for(i = 0; i < 6; i++){
+		obj->next = malloc(sizeof(Object));
+		obj = obj->next;
+		load_model(&(obj->model), "models/wall.obj");
+		obj->texture_id = scene->tex_wall;
+		obj->pos.x = 0.1*i;
+		obj->pos.y = 0.6;
+		obj->pos.z = 0;
+		obj->rot.x = 90;
+		obj->rot.y = 0;
+		obj->rot.z = 0;
+		obj->material.ambient.red = 0.5;
+		obj->material.ambient.green = 0.5;
+		obj->material.ambient.blue = 0.5;
+		obj->material.diffuse.red = 0.5;
+		obj->material.diffuse.green = 0.5;
+		obj->material.diffuse.blue = 0.5;
+		obj->material.specular.red = 0.5;
+		obj->material.specular.green = 0.5;
+		obj->material.specular.blue = 0.5;
+		obj->material.shininess = 100.0;
+	}
+	for(i = 0; i < 6; i++){
+		obj->next = malloc(sizeof(Object));
+		obj = obj->next;
+		load_model(&(obj->model), "models/wall.obj");
+		obj->texture_id = scene->tex_wall;
+		obj->pos.x = 0;
+		obj->pos.y = 0.1*i;
+		obj->pos.z = 0;
+		obj->rot.x = 90;
+		obj->rot.y = 90;
+		obj->rot.z = 0;
+		obj->material.ambient.red = 0.5;
+		obj->material.ambient.green = 0.5;
+		obj->material.ambient.blue = 0.5;
+		obj->material.diffuse.red = 0.5;
+		obj->material.diffuse.green = 0.5;
+		obj->material.diffuse.blue = 0.5;
+		obj->material.specular.red = 0.5;
+		obj->material.specular.green = 0.5;
+		obj->material.specular.blue = 0.5;
+		obj->material.shininess = 100.0;
+	}
+	for(i = 0; i < 6; i++){
+		obj->next = malloc(sizeof(Object));
+		obj = obj->next;
+		load_model(&(obj->model), "models/wall.obj");
+		obj->texture_id = scene->tex_wall;
+		obj->pos.x = 0.6;
+		obj->pos.y = 0.1*i;
+		obj->pos.z = 0;
+		obj->rot.x = 90;
+		obj->rot.y = 90;
+		obj->rot.z = 0;
+		obj->material.ambient.red = 0.5;
+		obj->material.ambient.green = 0.5;
+		obj->material.ambient.blue = 0.5;
+		obj->material.diffuse.red = 0.5;
+		obj->material.diffuse.green = 0.5;
+		obj->material.diffuse.blue = 0.5;
+		obj->material.specular.red = 0.5;
+		obj->material.specular.green = 0.5;
+		obj->material.specular.blue = 0.5;
+		obj->material.shininess = 100.0;
+	}
+	obj->next = NULL;
 }
 
 void draw_origin()

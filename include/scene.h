@@ -20,6 +20,8 @@ typedef struct Object
 typedef struct Scene
 {
     Camera camera;
+	GLuint tex_floor;
+	GLuint tex_wall;
     Object olist;
 } Scene;
 
