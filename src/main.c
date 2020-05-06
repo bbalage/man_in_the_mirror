@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 
     glutInit(&argc, argv);
 
-    glutInitWindowSize(640, 480);     
+    glutInitWindowSize(1024, 768);     
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
     window = glutCreateWindow("Man in the mirror.");

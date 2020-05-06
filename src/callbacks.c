@@ -58,7 +58,7 @@ void mouse(int button, int state, int x, int y)
 
 void motion(int x, int y)
 {
-    rotate_camera(&camera, mouse_position.x - x, mouse_position.y - y);
+    rotate_camera(&camera, (mouse_position.x - x)/2, (mouse_position.y - y)/2);
     mouse_position.x = x;
     mouse_position.y = y;
     glutPostRedisplay();

@@ -3,6 +3,7 @@
 
 #include "camera.h"
 #include "texture.h"
+#include "utils.h"
 
 #include <obj/model.h>
 
@@ -11,6 +12,8 @@ typedef struct Object
 	Model model;
 	Material material;
 	GLuint texture_id;
+	vec3 pos;
+	vec3 rot;
 	struct Object* next;
 } Object;
 

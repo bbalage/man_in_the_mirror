@@ -7,25 +7,36 @@
 
 void init_models(Scene* scene){
 	Object *obj = &scene->olist;
-	load_model(&(obj->model), "wall.obj");
-	obj->texture_id = load_texture("brick3.jpg");
+	int i, j;
+	//for(i = 0; i < 5; i++){
+		//for(j = 0; j < 5; j++){
+			load_model(&(obj->model), "wall.obj");
+			obj->texture_id = load_texture("brick3.jpg");
 	
-	glBindTexture(GL_TEXTURE_2D, obj->texture_id);
+			obj->pos.x = 0.1;
+			obj->pos.y = 0;
+			obj->pos.z = 0;
+			obj->rot.x = 90;
+			obj->rot.y = 0;
+			obj->rot.z = 0;
+			glBindTexture(GL_TEXTURE_2D, obj->texture_id);
 	
-	obj->material.ambient.red = 0.5;
-    obj->material.ambient.green = 0.5;
-    obj->material.ambient.blue = 0.5;
+			obj->material.ambient.red = 0.5;
+			obj->material.ambient.green = 0.5;
+			obj->material.ambient.blue = 0.5;
 
-    obj->material.diffuse.red = 0.5;
-    obj->material.diffuse.green = 0.5;
-    obj->material.diffuse.blue = 0.5;
+			obj->material.diffuse.red = 0.5;
+			obj->material.diffuse.green = 0.5;
+			obj->material.diffuse.blue = 0.5;
 
-    obj->material.specular.red = 0.5;
-    obj->material.specular.green = 0.5;
-    obj->material.specular.blue = 0.5;
+			obj->material.specular.red = 0.5;
+			obj->material.specular.green = 0.5;
+			obj->material.specular.blue = 0.5;
 	
-	obj->material.shininess = 100.0;
-	obj->next = NULL;
+			obj->material.shininess = 100.0;
+			obj->next = NULL;
+		//}
+	//}
 }
 
 void init_scene(Scene* scene)
@@ -84,11 +95,17 @@ void draw_models(const Object* olist){
 	Object *obj = olist;
 	glMatrixMode(GL_MODELVIEW);
     //glLoadIdentity();
-	glRotatef(-90, 0, 1.0, 0);
-    glTranslatef(10,0,0);
 	while(obj != NULL){
 		set_material(&(obj->material));
+		glRotatef(obj->rot.x, 1.0, 0, 0);
+		glRotatef(obj->rot.y, 0, 1.0, 0);
+		glRotatef(obj->rot.z, 0, 0, 1.0);
+		glTranslatef(obj->pos.x,obj->pos.y,obj->pos.z);
 		draw_model(&(obj->model));
+		glTranslatef(-obj->pos.x,-obj->pos.y,-obj->pos.z);
+		glRotatef(-obj->rot.z, 0, 0, 1.0);
+		glRotatef(-obj->rot.y, 0, 1.0, 0);
+		glRotatef(-obj->rot.x, 1.0, 0, 0);
 		obj = obj->next;
 	}
 }
