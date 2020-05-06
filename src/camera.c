@@ -45,9 +45,11 @@ void set_view(const Camera* camera)
 
 void rotate_camera(Camera* camera, double horizontal, double vertical)
 {
-    camera->rotation.z += horizontal;
-    camera->rotation.x += vertical;
-
+    if(camera->rotation.x + vertical > 60) camera->rotation.x = 60;
+	else if(camera->rotation.x + vertical < -60) camera->rotation.x = -60;
+	else camera->rotation.x += vertical;
+	camera->rotation.z += horizontal;
+    
     if (camera->rotation.z < 0) {
         camera->rotation.z += 360.0;
     }
@@ -56,13 +58,13 @@ void rotate_camera(Camera* camera, double horizontal, double vertical)
         camera->rotation.z -= 360.0;
     }
 
-    if (camera->rotation.x < 0) {
+    /*if (camera->rotation.x < 0) {
         camera->rotation.x += 360.0;
     }
 
     if (camera->rotation.x > 360.0) {
         camera->rotation.x -= 360.0;
-    }
+    }*/
 }
 
 void set_camera_speed(Camera* camera, double speed)
