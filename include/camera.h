@@ -3,6 +3,7 @@
 
 #include "utils.h"
 
+
 /**
  * Camera, as a moving point with direction
  */
@@ -26,7 +27,12 @@ void init_camera(Camera* camera);
 /**
  * Update the position of the camera.
  */
-void update_camera(Camera* camera, double time);
+void update_camera(Camera* camera, vec3 newpos);
+
+/**
+ * Get the new position of the camera without setting it.
+ */
+vec3 get_new_camera_pos(Camera* camera, double time);
 
 /**
  * Apply the camera settings to the view transformation.

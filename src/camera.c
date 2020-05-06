@@ -6,9 +6,9 @@
 
 void init_camera(Camera* camera)
 {
-    camera->position.x = 0.0;
-    camera->position.y = 0.0;
-    camera->position.z = 0.05;
+    camera->position.x = 0.2;
+    camera->position.y = 0.2;
+    camera->position.z = WALK_HEIGHT;
     camera->rotation.x = 0.0;
     camera->rotation.y = 0.0;
     camera->rotation.z = 0.0;
@@ -19,18 +19,28 @@ void init_camera(Camera* camera)
     is_preview_visible = FALSE;
 }
 
-void update_camera(Camera* camera, double time)
+void update_camera(Camera* camera, vec3 newpos){
+	camera->position.x = newpos.x;
+	camera->position.y = newpos.y;
+	camera->position.z = newpos.z;
+}
+
+vec3 get_new_camera_pos(Camera* camera, double time)
 {
     double angle;
     double side_angle;
-
+	double newx, newy;
+	vec3 new;
+	
     angle = degree_to_radian(camera->rotation.z);
     side_angle = degree_to_radian(camera->rotation.z + 90.0);
 
-    camera->position.x += cos(angle) * camera->speed.y * time;
-    camera->position.y += sin(angle) * camera->speed.y * time;
-    camera->position.x += cos(side_angle) * camera->speed.x * time;
-    camera->position.y += sin(side_angle) * camera->speed.x * time;
+    new.x = camera->position.x + cos(angle) * camera->speed.y * time;
+    new.y = camera->position.y + sin(angle) * camera->speed.y * time;
+    new.x += cos(side_angle) * camera->speed.x * time;
+    new.y += sin(side_angle) * camera->speed.x * time;
+	new.z = WALK_HEIGHT;
+	return new;
 }
 
 void set_view(const Camera* camera)
@@ -103,4 +113,3 @@ void show_texture_preview()
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
 }
-

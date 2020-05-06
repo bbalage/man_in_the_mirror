@@ -7,6 +7,11 @@
 
 #include <obj/model.h>
 
+#define WALL_MIN_X 0
+#define WALL_MAX_X 0.6
+#define WALL_MIN_Y 0
+#define WALL_MAX_Y 0.6
+
 typedef struct Object
 {
 	Model model;
@@ -52,7 +57,15 @@ void draw_scene(const Scene* scene);
  */
 void draw_origin();
 
+/**
+ * Check if the position given with newx and newy would be a hit with any object in the scene.
+ */
+int checkhit(Object* olist, vec3 newpos, double precision);
 
+/**
+ * Check if the position given with newx and newy would be a hit with static wall boundaries.
+ */
+int checkhit_wall(vec3 newpos, double precision);
 /**
  * Move the loaded model.
  */

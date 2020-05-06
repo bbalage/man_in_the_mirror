@@ -218,6 +218,20 @@ void draw_origin()
     glEnd();
 }
 
+int checkhit_wall(vec3 newpos, double precision){
+	if(newpos.x < WALL_MIN_X + precision || newpos.x > WALL_MAX_X - precision || newpos.y < WALL_MIN_Y + precision || newpos.y > WALL_MAX_Y - precision) return FALSE;
+	return TRUE;
+}
+
+int checkhit(Object* olist, vec3 newpos, double precision){
+	Object* obj = olist->next;
+	while(obj != NULL){
+		if(newpos.x < obj->pos.x + precision && newpos.x > obj->pos.x - precision && newpos.y > obj->pos.y - precision && newpos.y < obj->pos.y + precision) return FALSE;
+		obj = obj->next;
+	}
+	return TRUE;
+}
+
 void move_model(Model* model, double xm, double ym, double zm)
 {
     int i;

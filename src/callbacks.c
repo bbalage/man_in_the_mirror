@@ -2,7 +2,6 @@
 
 #define VIEWPORT_RATIO (4.0 / 3.0)
 #define VIEWPORT_ASPECT 50.0
-#define WALK_SPEED 0.2
 
 struct {
     int x;
@@ -114,12 +113,14 @@ void idle()
     static int last_frame_time = 0;
     int current_time;
     double elapsed_time;
+    vec3 newpos;
    
     current_time = glutGet(GLUT_ELAPSED_TIME);
     elapsed_time = (double)(current_time - last_frame_time) / 1000;
     last_frame_time = current_time;
 
-    update_camera(&camera, elapsed_time);
+	newpos = get_new_camera_pos(&camera, elapsed_time);
+	if(checkhit_wall(newpos, 0.02)) update_camera(&camera, newpos);
 
     glutPostRedisplay();
 }
