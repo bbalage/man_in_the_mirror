@@ -8,15 +8,17 @@
 void init_models(Scene* scene){
 	Object *obj = &scene->olist;
 	int i, j;
-	//for(i = 0; i < 5; i++){
-		//for(j = 0; j < 5; j++){
+	for(i = 0; i < 5; i++){
+		for(j = 0; j < 5; j++){
+			obj->next = malloc(sizeof(Object));
+			obj = obj->next;
 			load_model(&(obj->model), "wall.obj");
 			obj->texture_id = load_texture("brick3.jpg");
 	
-			obj->pos.x = 0.1;
-			obj->pos.y = 0;
+			obj->pos.x = 0.1*j;
+			obj->pos.y = 0.1*i;
 			obj->pos.z = 0;
-			obj->rot.x = 90;
+			obj->rot.x = 0;
 			obj->rot.y = 0;
 			obj->rot.z = 0;
 			glBindTexture(GL_TEXTURE_2D, obj->texture_id);
@@ -34,9 +36,9 @@ void init_models(Scene* scene){
 			obj->material.specular.blue = 0.5;
 	
 			obj->material.shininess = 100.0;
-			obj->next = NULL;
-		//}
-	//}
+		}
+	}
+	obj->next = NULL;
 }
 
 void init_scene(Scene* scene)
@@ -92,7 +94,7 @@ void draw_scene(const Scene* scene)
 }
 
 void draw_models(const Object* olist){
-	Object *obj = olist;
+	Object *obj = olist->next;
 	glMatrixMode(GL_MODELVIEW);
     //glLoadIdentity();
 	while(obj != NULL){
