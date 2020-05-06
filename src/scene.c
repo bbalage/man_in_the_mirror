@@ -12,8 +12,8 @@ void init_models(Scene* scene){
 		for(j = 0; j < 5; j++){
 			obj->next = malloc(sizeof(Object));
 			obj = obj->next;
-			load_model(&(obj->model), "wall.obj");
-			obj->texture_id = load_texture("brick3.jpg");
+			load_model(&(obj->model), "models/wall.obj");
+			obj->texture_id = load_texture("textures/brick3.jpg");
 	
 			obj->pos.x = 0.1*j;
 			obj->pos.y = 0.1*i;
