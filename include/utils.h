@@ -4,7 +4,7 @@
 #define FALSE 0
 #define TRUE 1
 #define WALK_SPEED 0.2
-#define WALK_HEIGHT 0.05
+#define WALK_HEIGHT 0.06
 
 /**
  * GLSL-like three dimensional vector

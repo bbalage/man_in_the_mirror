@@ -27,6 +27,7 @@ typedef struct Scene
     Camera camera;
 	GLuint tex_floor;
 	GLuint tex_wall;
+	GLuint tex_darkcloth;
     Object olist;
 } Scene;
 

@@ -9,6 +9,7 @@ void init_scene(Scene* scene)
 {
     scene->tex_wall = load_texture("textures/brick3.jpg");
 	scene->tex_floor = load_texture("textures/floor.jpeg");
+	scene->tex_darkcloth = load_texture("textures/darkcloth.jpg");
 	init_models(scene);
 }
 
@@ -196,6 +197,26 @@ void init_models(Scene* scene){
 		obj->material.specular.blue = 0.5;
 		obj->material.shininess = 100.0;
 	}
+	obj->next = malloc(sizeof(Object));
+	obj = obj->next;
+	load_model(&(obj->model), "models/proba3_2.obj");
+	obj->texture_id = scene->tex_darkcloth;
+	obj->pos.x = 0.5;
+	obj->pos.y = 0.5;
+	obj->pos.z = 0;
+	obj->rot.x = 90;
+	obj->rot.y = 0;
+	obj->rot.z = 0;
+	obj->material.ambient.red = 1;
+	obj->material.ambient.green = 1;
+	obj->material.ambient.blue = 1;
+	obj->material.diffuse.red = 1;
+	obj->material.diffuse.green = 1;
+	obj->material.diffuse.blue = 1;
+	obj->material.specular.red = 1;
+	obj->material.specular.green = 1;
+	obj->material.specular.blue = 1;
+	obj->material.shininess = 100.0;
 	obj->next = NULL;
 }
 
