@@ -67,15 +67,13 @@ void draw_models(const Object* olist){
 	while(obj != NULL){
 		glBindTexture(GL_TEXTURE_2D, obj->texture_id);
 		set_material(&(obj->material));
+		glPushMatrix();
 		glTranslatef(obj->pos.x,obj->pos.y,obj->pos.z);
 		glRotatef(obj->rot.x, 1.0, 0, 0);
 		glRotatef(obj->rot.y, 0, 1.0, 0);
 		glRotatef(obj->rot.z, 0, 0, 1.0);
 		draw_model(&(obj->model));
-		glRotatef(-obj->rot.z, 0, 0, 1.0);
-		glRotatef(-obj->rot.y, 0, 1.0, 0);
-		glRotatef(-obj->rot.x, 1.0, 0, 0);
-		glTranslatef(-obj->pos.x,-obj->pos.y,-obj->pos.z);
+		glPopMatrix();
 		obj = obj->next;
 	}
 }
@@ -199,7 +197,7 @@ void init_models(Scene* scene){
 	}
 	obj->next = malloc(sizeof(Object));
 	obj = obj->next;
-	load_model(&(obj->model), "models/proba3_2.obj");
+	load_model(&(obj->model), "models/nhead.obj");
 	obj->texture_id = scene->tex_darkcloth;
 	obj->pos.x = 0.5;
 	obj->pos.y = 0.5;
