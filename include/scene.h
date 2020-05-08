@@ -3,24 +3,14 @@
 
 #include "camera.h"
 #include "texture.h"
-#include "utils.h"
-
-#include <obj/model.h>
+#include "man.h"
 
 #define WALL_MIN_X 0
 #define WALL_MAX_X 0.6
 #define WALL_MIN_Y 0
 #define WALL_MAX_Y 0.6
 
-typedef struct Object
-{
-	Model model;
-	Material material;
-	GLuint texture_id;
-	vec3 pos;
-	vec3 rot;
-	struct Object* next;
-} Object;
+
 
 typedef struct Scene
 {

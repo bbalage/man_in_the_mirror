@@ -1,10 +1,12 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <math.h>
 #define FALSE 0
 #define TRUE 1
 #define WALK_SPEED 0.2
 #define WALK_HEIGHT 0.06
+
 
 /**
  * GLSL-like three dimensional vector
@@ -41,5 +43,6 @@ typedef struct Material
  * Calculates radian from degree.
  */
 double degree_to_radian(double degree);
+
 
 #endif /* UTILS_H */
