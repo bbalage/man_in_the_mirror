@@ -19,10 +19,11 @@ typedef struct Scene
 	GLuint tex_wall;
 	GLuint tex_darkcloth;
     Object olist;
+	Man man;
 } Scene;
 
 void init_models(Scene* scene);
-void draw_models(const Object* olist);
+void draw_bounds(const Object* olist);
 /**
  * Initialize the scene by loading models.
  */

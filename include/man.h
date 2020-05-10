@@ -22,4 +22,9 @@ typedef struct Man
  * Function to be called to move the man.
  */
 void move(vec3 newpos, vec3 newrot);
+
+/**
+ * Function for initializing a man.
+ */
+void init_man(Man* man, vec3 pos, vec3 rot, GLuint tex_id);
 #endif
