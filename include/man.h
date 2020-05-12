@@ -46,7 +46,7 @@ int check_if_man_moves(Man* man, double elapsed_time);
 /**
  * Function which determines a new course for the man.
  */
-void set_new_course(Man* man);
+void set_new_course(Man* man, int chmod);
 /**
  * Function for initializing a man.
  */

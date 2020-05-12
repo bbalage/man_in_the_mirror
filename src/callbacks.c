@@ -124,7 +124,7 @@ void idle()
 	if(check_if_man_moves(&scene.man,elapsed_time)){
 		newpos = get_new_man_pos(&scene.man);
 		if(checkhit_wall(newpos, 0.05)) move_man(&scene.man, newpos);
-		else set_new_course(&scene.man);
+		else set_new_course(&scene.man, 10);
 	}
     glutPostRedisplay();
 }

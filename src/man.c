@@ -38,6 +38,12 @@ void move_man(Man* man, vec3 newpos)
 	Object tmpobj;
 	double newz, rotshift, xshift;
 	man->pos = newpos;
+	switch(man->dir){
+		case 0: man->rot.z=0; break;
+		case 1: man->rot.z=90; break;
+		case 2: man->rot.z=180; break;
+		case 3: man->rot.z=-90; break;
+	}
 	if(man->movephase != TOP_MOVE_PHASE){
 		man->movephase++;
 		rotshift = 1.5;
@@ -58,6 +64,8 @@ void move_man(Man* man, vec3 newpos)
 		man->leg1 = man->leg2;
 		man->leg2 = tmpobj;
 	}
+	srand(time(0));
+	if(rand()%500 < man->change_dir++) set_new_course(man, -1);
 }
 
 vec3 get_new_man_pos(Man* man)
@@ -72,17 +80,20 @@ vec3 get_new_man_pos(Man* man)
 	return newpos;
 }
 
-void set_new_course(Man* man)
+void set_new_course(Man* man, int chmod)
 {
+	int newdir;
 	srand(time(0));
-	man->change_dir = CHANGE_DIR_INIT;
-	man->dir = rand()%4;
-	switch(man->dir){
-		case 0: man->rot.z=0; break;
-		case 1: man->rot.z=90; break;
-		case 2: man->rot.z=180; break;
-		case 3: man->rot.z=-90; break;
+	if(chmod < 0) man->change_dir = CHANGE_DIR_INIT;
+	else if(chmod == 0) man->change_dir = 0;
+	else {
+		man->change_dir-=chmod;
 	}
+	do{
+		newdir = rand()%4;
+	}
+	while(newdir == man->dir);
+	man->dir = newdir;
 }
 
 int check_if_man_moves(Man* man, double elapsed_time){
