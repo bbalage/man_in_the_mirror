@@ -11,8 +11,26 @@ void init_man(Man* man, vec3 pos, vec3 rot, GLuint tex_id)
 {
 	man->pos = pos;
 	man->rot = rot;
-	int desc[] = {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 100.0};
+	double desc[] = {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 100.0};
 	man->leg1 = *(load_object(desc, "models/nleg.obj", tex_id));
+	desc[1] = 0.01;
+	man->leg2 = *(load_object(desc, "models/nleg.obj", tex_id)); //trimmed to 0.045!!
+	desc[1] = 0.02;
+	desc[2] = 0.038;
+	desc[5] = 90;
+	man->torso = *(load_object(desc, "models/nbody.obj", tex_id)); //trimmed to 0.04
+	desc[1] = 0.002;
+	desc[2] = 0.075;
+	desc[5] = 0;
+	man->head = *(load_object(desc, "models/nhead.obj", tex_id)); //trimmed to 0.015
+	desc[1] = -0.004;
+	desc[2] = 0.025;
+	desc[5] = 90;
+	man->arm1 = *(load_object(desc, "models/narm.obj", tex_id)); //trimmed to 0.045
+	desc[1] = 0.026;
+	//desc[2] = 0.025;
+	//desc[5] = 90;
+	man->arm2 = *(load_object(desc, "models/narm.obj", tex_id)); //trimmed to 0.045
 }
 
 /*

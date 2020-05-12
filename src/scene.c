@@ -7,8 +7,8 @@ void init_scene(Scene* scene)
 	scene->tex_darkcloth = load_texture("textures/darkcloth.jpg");
 	vec3 pos = {0.5,0.5,0};
 	vec3 rot = {0,0,0};
-	init_man(&scene->man, pos, rot, scene->tex_darkcloth);
 	init_models(scene);
+	init_man(&scene->man, pos, rot, scene->tex_darkcloth);
 }
 
 void set_lighting()
@@ -61,18 +61,32 @@ void draw_scene(const Scene* scene)
 
 void draw_man(const Man* man)
 {
+	Object* obj;
+	int i;
 	glMatrixMode(GL_MODELVIEW);
-	glBindTexture(GL_TEXTURE_2D, man->leg1.texture_id);
 	glPushMatrix();
 	glTranslatef(man->pos.x,man->pos.y,man->pos.z);
 	glRotatef(man->rot.x, 1.0, 0, 0);
 	glRotatef(man->rot.y, 0, 1.0, 0);
 	glRotatef(man->rot.z, 0, 0, 1.0);
-	glTranslatef(man->leg1.pos.x,man->leg1.pos.y,man->leg1.pos.z);
-	glRotatef(man->leg1.rot.x, 1.0, 0, 0);
-	glRotatef(man->leg1.rot.y, 0, 1.0, 0);
-	glRotatef(man->leg1.rot.z, 0, 0, 1.0);
-	draw_model(&(man->leg1.model));
+	for(i = 0; i < 6; i++){
+		switch(i){
+			case 0: obj = &man->leg1; break;
+			case 1: obj = &man->leg2; break;
+			case 2: obj = &man->torso; break;
+			case 3: obj = &man->head; break;
+			case 4: obj = &man->arm1; break;
+			case 5: obj = &man->arm2; break;
+		}
+		glBindTexture(GL_TEXTURE_2D, obj->texture_id);
+		glPushMatrix();
+		glTranslatef(obj->pos.x,obj->pos.y,obj->pos.z);
+		glRotatef(obj->rot.x, 1.0, 0, 0);
+		glRotatef(obj->rot.y, 0, 1.0, 0);
+		glRotatef(obj->rot.z, 0, 0, 1.0);
+		draw_model(&(obj->model));
+		glPopMatrix();
+	}
 	glPopMatrix();
 }
 

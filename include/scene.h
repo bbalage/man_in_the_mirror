@@ -23,6 +23,9 @@ typedef struct Scene
 } Scene;
 
 void init_models(Scene* scene);
+
+void draw_man(const Man* man);
+
 void draw_bounds(const Object* olist);
 /**
  * Initialize the scene by loading models.
