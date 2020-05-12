@@ -2,19 +2,19 @@
 
 #include "utils.h"
 
-void move(vec3 newpos, vec3 newrot)
+void init_man(Man* man, GLuint tex_id, Model_List* mlist)
 {
-	;
-}
-
-void init_man(Man* man, vec3 pos, vec3 rot, GLuint tex_id, Model_List* mlist)
-{
+	vec3 pos = {0.5,0.5,0};
+	vec3 rot = {0,0,START_Z};
 	man->pos = pos;
 	man->rot = rot;
+	man->nextrot = rot;
+	man->movephase = 0;
+	man->since_last_move = 0;
 	double desc[] = {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 100.0};
-	man->leg1 = *(load_object(desc, &mlist->mlegmodel, tex_id));
+	man->leg1 = *(load_object(desc, &mlist->mlegmodel, tex_id));//trimmed to 0.045
 	desc[1] = 0.01;
-	man->leg2 = *(load_object(desc, &mlist->mlegmodel, tex_id)); //trimmed to 0.045!!
+	man->leg2 = *(load_object(desc, &mlist->mlegmodel, tex_id)); //trimmed to 0.045
 	desc[1] = 0.02;
 	desc[2] = 0.038;
 	desc[5] = 90;
@@ -28,9 +28,49 @@ void init_man(Man* man, vec3 pos, vec3 rot, GLuint tex_id, Model_List* mlist)
 	desc[5] = 90;
 	man->arm1 = *(load_object(desc, &mlist->marmmodel, tex_id)); //trimmed to 0.045
 	desc[1] = 0.026;
-	//desc[2] = 0.025;
-	//desc[5] = 90;
 	man->arm2 = *(load_object(desc, &mlist->marmmodel, tex_id)); //trimmed to 0.045
+}
+
+void move_man(Man* man, vec3 newpos)
+{
+	Object tmpobj;
+	double newz, rotshift, xshift;
+	if(man->movephase != TOP_MOVE_PHASE){
+		man->movephase++;
+		rotshift = 1.5;
+		xshift = 0.0009;
+		newz = rotshift*man->movephase*0.00027;
+		newz = newz < 0 ? newz*-1 : newz;
+		man->leg1.pos.x-= xshift;
+		man->leg1.pos.z= newz;
+		man->leg1.rot.y+= rotshift;
+		man->leg2.pos.x+= xshift;
+		man->leg2.pos.z= newz;
+		man->leg2.rot.y-= rotshift;
+		man->pos.z = START_Z-newz/2;
+	}
+	else{
+		man->movephase = man->movephase*-1-1;
+		tmpobj = man->leg1;
+		man->leg1 = man->leg2;
+		man->leg2 = tmpobj;
+	}
+}
+
+vec3 get_new_man_pos(Man* man)
+{
+	vec3 newpos = man->pos;
+	
+	return newpos;
+}
+
+int check_if_man_moves(Man* man, double elapsed_time){
+	man->since_last_move+=elapsed_time;
+	if(man->since_last_move > MAN_SLOWDOWN) {
+		man->since_last_move = 0;
+		return 1;
+	}
+	else return 0;
 }
 
 /*
@@ -42,26 +82,4 @@ void init_man(Man* man, vec3 pos, vec3 rot, GLuint tex_id, Model_List* mlist)
 	Object arm1;
 	Object arm2;
 	Object torso;
-	
-	obj->next = malloc(sizeof(Object));
-	obj = obj->next;
-	load_model(&(obj->model), "models/nleg.obj");
-	obj->texture_id = scene->tex_darkcloth;
-	obj->pos.x = 0.5;
-	obj->pos.y = 0.5;
-	obj->pos.z = 0;
-	obj->rot.x = 0;
-	obj->rot.y = 0;
-	obj->rot.z = 0;
-	obj->material.ambient.red = 1;
-	obj->material.ambient.green = 1;
-	obj->material.ambient.blue = 1;
-	obj->material.diffuse.red = 1;
-	obj->material.diffuse.green = 1;
-	obj->material.diffuse.blue = 1;
-	obj->material.specular.red = 1;
-	obj->material.specular.green = 1;
-	obj->material.specular.blue = 1;
-	obj->material.shininess = 100.0;
-	obj->next = NULL;
 */

@@ -121,6 +121,9 @@ void idle()
 
 	newpos = get_new_camera_pos(&camera, elapsed_time);
 	if(checkhit_wall(newpos, 0.02)) update_camera(&camera, newpos);
-
+	if(check_if_man_moves(&scene.man,elapsed_time)){
+		newpos = get_new_man_pos(&scene.man);
+		if(checkhit_wall(newpos, 0.02)) move_man(&scene.man, newpos);
+	}
     glutPostRedisplay();
 }

@@ -5,11 +5,9 @@ void init_scene(Scene* scene)
     scene->tex_wall = load_texture("textures/brick3.jpg");
 	scene->tex_floor = load_texture("textures/floor.jpeg");
 	scene->tex_darkcloth = load_texture("textures/darkcloth.jpg");
-	vec3 pos = {0.5,0.5,0};
-	vec3 rot = {0,0,0};
 	init_models(scene);
 	init_bounds(scene);
-	init_man(&scene->man, pos, rot, scene->tex_darkcloth, &scene->mlist);
+	init_man(&scene->man, scene->tex_darkcloth, &scene->mlist);
 }
 
 void init_models(Scene* scene){
