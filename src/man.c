@@ -7,30 +7,30 @@ void move(vec3 newpos, vec3 newrot)
 	;
 }
 
-void init_man(Man* man, vec3 pos, vec3 rot, GLuint tex_id)
+void init_man(Man* man, vec3 pos, vec3 rot, GLuint tex_id, Model_List* mlist)
 {
 	man->pos = pos;
 	man->rot = rot;
 	double desc[] = {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 100.0};
-	man->leg1 = *(load_object(desc, "models/nleg.obj", tex_id));
+	man->leg1 = *(load_object(desc, &mlist->mlegmodel, tex_id));
 	desc[1] = 0.01;
-	man->leg2 = *(load_object(desc, "models/nleg.obj", tex_id)); //trimmed to 0.045!!
+	man->leg2 = *(load_object(desc, &mlist->mlegmodel, tex_id)); //trimmed to 0.045!!
 	desc[1] = 0.02;
 	desc[2] = 0.038;
 	desc[5] = 90;
-	man->torso = *(load_object(desc, "models/nbody.obj", tex_id)); //trimmed to 0.04
+	man->body = *(load_object(desc, &mlist->mbodymodel, tex_id)); //trimmed to 0.04
 	desc[1] = 0.002;
 	desc[2] = 0.075;
 	desc[5] = 0;
-	man->head = *(load_object(desc, "models/nhead.obj", tex_id)); //trimmed to 0.015
+	man->head = *(load_object(desc, &mlist->mheadmodel, tex_id)); //trimmed to 0.015
 	desc[1] = -0.004;
 	desc[2] = 0.025;
 	desc[5] = 90;
-	man->arm1 = *(load_object(desc, "models/narm.obj", tex_id)); //trimmed to 0.045
+	man->arm1 = *(load_object(desc, &mlist->marmmodel, tex_id)); //trimmed to 0.045
 	desc[1] = 0.026;
 	//desc[2] = 0.025;
 	//desc[5] = 90;
-	man->arm2 = *(load_object(desc, "models/narm.obj", tex_id)); //trimmed to 0.045
+	man->arm2 = *(load_object(desc, &mlist->marmmodel, tex_id)); //trimmed to 0.045
 }
 
 /*

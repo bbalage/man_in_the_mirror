@@ -18,11 +18,14 @@ typedef struct Scene
 	GLuint tex_floor;
 	GLuint tex_wall;
 	GLuint tex_darkcloth;
+	Model_List mlist;
     Object olist;
 	Man man;
 } Scene;
 
 void init_models(Scene* scene);
+
+void init_bounds(Scene* scene);
 
 void draw_man(const Man* man);
 

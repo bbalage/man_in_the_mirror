@@ -11,7 +11,7 @@
 */
 typedef struct Object
 {
-	Model model;
+	Model* model;
 	Material material;
 	GLuint texture_id;
 	vec3 pos;
@@ -19,9 +19,18 @@ typedef struct Object
 	struct Object* next;
 } Object;
 
+typedef struct Model_List
+{
+	Model boundmodel;
+	Model mlegmodel;
+	Model marmmodel;
+	Model mheadmodel;
+	Model mbodymodel;
+} Model_List;
+
 /**
 * Function to be called to load an object.
 * desc should be an array of doubles which represent:
 */
-Object* load_object(double desc[], char modelname[], GLuint tex_id);
+Object* load_object(double desc[], Model* model, GLuint tex_id);
 #endif

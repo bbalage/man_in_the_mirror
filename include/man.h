@@ -15,7 +15,7 @@ typedef struct Man
 	Object head;
 	Object arm1;
 	Object arm2;
-	Object torso;
+	Object body;
 } Man;
 
 /**
@@ -26,5 +26,5 @@ void move(vec3 newpos, vec3 newrot);
 /**
  * Function for initializing a man.
  */
-void init_man(Man* man, vec3 pos, vec3 rot, GLuint tex_id);
+void init_man(Man* man, vec3 pos, vec3 rot, GLuint tex_id, Model_List* mlist);
 #endif

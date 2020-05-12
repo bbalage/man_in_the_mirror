@@ -8,7 +8,60 @@ void init_scene(Scene* scene)
 	vec3 pos = {0.5,0.5,0};
 	vec3 rot = {0,0,0};
 	init_models(scene);
-	init_man(&scene->man, pos, rot, scene->tex_darkcloth);
+	init_bounds(scene);
+	init_man(&scene->man, pos, rot, scene->tex_darkcloth, &scene->mlist);
+}
+
+void init_models(Scene* scene){
+	load_model(&scene->mlist.boundmodel, "models/wall.obj");
+	load_model(&scene->mlist.mlegmodel, "models/mleg.obj");
+	load_model(&scene->mlist.marmmodel, "models/marm.obj");
+	load_model(&scene->mlist.mheadmodel, "models/mhead.obj");
+	load_model(&scene->mlist.mbodymodel, "models/mbody.obj");
+}
+
+void init_bounds(Scene* scene){
+	Object *obj = &scene->olist;
+	int i, j, k;
+	double desc[] = {0, 0, 0, 0, 0, 0, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 100};
+	for(k = 0; k < 2; k++){
+		for(i = 0; i < 6; i++){
+			for(j = 0; j < 6; j++){
+				desc[0] = 0.1*j;
+				desc[1] = 0.1*i;
+				desc[2] = 0.1*k;
+				obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_floor);
+				obj = obj->next;
+			}
+		}
+	}
+	desc[1] = desc[2] = 0;
+	desc[3] = 90;
+	for(i = 6; i < 15; i++) desc[i] = 0.5;
+	for(i = 0; i < 6; i++){
+		desc[0] = 0.1*i;
+		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
+		obj = obj->next;
+	}
+	desc[1] = 0.6;
+	for(i = 0; i < 6; i++){
+		desc[0] = 0.1*i;
+		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
+		obj = obj->next;
+	}
+	desc[0] = 0;
+	desc[4] = 90;
+	for(i = 0; i < 6; i++){
+		desc[1] = 0.1*i;
+		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
+		obj = obj->next;
+	}
+	desc[0] = 0.6;
+	for(i = 0; i < 6; i++){
+		desc[1] = 0.1*i;
+		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
+		obj = obj->next;
+	}
 }
 
 void set_lighting()
@@ -73,7 +126,7 @@ void draw_man(const Man* man)
 		switch(i){
 			case 0: obj = &man->leg1; break;
 			case 1: obj = &man->leg2; break;
-			case 2: obj = &man->torso; break;
+			case 2: obj = &man->body; break;
 			case 3: obj = &man->head; break;
 			case 4: obj = &man->arm1; break;
 			case 5: obj = &man->arm2; break;
@@ -84,7 +137,7 @@ void draw_man(const Man* man)
 		glRotatef(obj->rot.x, 1.0, 0, 0);
 		glRotatef(obj->rot.y, 0, 1.0, 0);
 		glRotatef(obj->rot.z, 0, 0, 1.0);
-		draw_model(&(obj->model));
+		draw_model(obj->model);
 		glPopMatrix();
 	}
 	glPopMatrix();
@@ -102,55 +155,10 @@ void draw_bounds(const Object* olist){
 		glRotatef(obj->rot.x, 1.0, 0, 0);
 		glRotatef(obj->rot.y, 0, 1.0, 0);
 		glRotatef(obj->rot.z, 0, 0, 1.0);
-		draw_model(&(obj->model));
+		draw_model(obj->model);
 		glPopMatrix();
 		obj = obj->next;
 	}
-}
-
-void init_models(Scene* scene){
-	Object *obj = &scene->olist;
-	int i, j, k;
-	double desc[] = {0, 0, 0, 0, 0, 0, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 100};
-	for(k = 0; k < 2; k++){
-		for(i = 0; i < 6; i++){
-			for(j = 0; j < 6; j++){
-				desc[0] = 0.1*j;
-				desc[1] = 0.1*i;
-				desc[2] = 0.1*k;
-				obj->next = load_object(desc, "models/wall.obj", scene->tex_floor);
-				obj = obj->next;
-			}
-		}
-	}
-	desc[1] = desc[2] = 0;
-	desc[3] = 90;
-	for(i = 6; i < 15; i++) desc[i] = 0.5;
-	for(i = 0; i < 6; i++){
-		desc[0] = 0.1*i;
-		obj->next = load_object(desc, "models/wall.obj", scene->tex_wall);
-		obj = obj->next;
-	}
-	desc[1] = 0.6;
-	for(i = 0; i < 6; i++){
-		desc[0] = 0.1*i;
-		obj->next = load_object(desc, "models/wall.obj", scene->tex_wall);
-		obj = obj->next;
-	}
-	desc[0] = 0;
-	desc[4] = 90;
-	for(i = 0; i < 6; i++){
-		desc[1] = 0.1*i;
-		obj->next = load_object(desc, "models/wall.obj", scene->tex_wall);
-		obj = obj->next;
-	}
-	desc[0] = 0.6;
-	for(i = 0; i < 6; i++){
-		desc[1] = 0.1*i;
-		obj->next = load_object(desc, "models/wall.obj", scene->tex_wall);
-		obj = obj->next;
-	}
-	
 }
 
 void draw_origin()
