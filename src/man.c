@@ -11,6 +11,8 @@ void init_man(Man* man, GLuint tex_id, Model_List* mlist)
 	man->nextrot = rot;
 	man->movephase = 0;
 	man->since_last_move = 0;
+	man->dir = 0;
+	man->change_dir = CHANGE_DIR_INIT;
 	double desc[] = {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 100.0};
 	man->leg1 = *(load_object(desc, &mlist->mlegmodel, tex_id));//trimmed to 0.045
 	desc[1] = 0.01;
@@ -35,10 +37,11 @@ void move_man(Man* man, vec3 newpos)
 {
 	Object tmpobj;
 	double newz, rotshift, xshift;
+	man->pos = newpos;
 	if(man->movephase != TOP_MOVE_PHASE){
 		man->movephase++;
 		rotshift = 1.5;
-		xshift = 0.0009;
+		xshift = 0.001;
 		newz = rotshift*man->movephase*0.00027;
 		newz = newz < 0 ? newz*-1 : newz;
 		man->leg1.pos.x-= xshift;
@@ -60,8 +63,26 @@ void move_man(Man* man, vec3 newpos)
 vec3 get_new_man_pos(Man* man)
 {
 	vec3 newpos = man->pos;
-	
+	switch(man->dir){
+		case 0: newpos.x+=MAN_WALK_SPEED; break;
+		case 1: newpos.y+=MAN_WALK_SPEED; break;
+		case 2: newpos.x-=MAN_WALK_SPEED; break;
+		case 3: newpos.y-=MAN_WALK_SPEED; break;
+	}
 	return newpos;
+}
+
+void set_new_course(Man* man)
+{
+	srand(time(0));
+	man->change_dir = CHANGE_DIR_INIT;
+	man->dir = rand()%4;
+	switch(man->dir){
+		case 0: man->rot.z=0; break;
+		case 1: man->rot.z=90; break;
+		case 2: man->rot.z=180; break;
+		case 3: man->rot.z=-90; break;
+	}
 }
 
 int check_if_man_moves(Man* man, double elapsed_time){
