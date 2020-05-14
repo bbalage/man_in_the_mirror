@@ -18,10 +18,12 @@ typedef struct Scene
 	GLuint tex_floor;
 	GLuint tex_wall;
 	GLuint tex_darkcloth;
+	GLuint tex_painting;
 	Model_List mlist;
 	Model_List rmlist;
     Object olist; //the first element of the olist must be blank!
-	Object rolist; //the first element of the olist must be blank!
+	Object ornlist; //the first element of the ornlist must be blank!
+	Object rolist; //the first element of the rolist must be blank!
 	Man man;
 	vec3 mir_plane;
 } Scene;
@@ -35,6 +37,11 @@ void init_models(Scene* scene);
  * Sets up the list containing the walls, floor and roof of the scene.
  */
 void init_bounds(Scene* scene);
+
+/**
+ * Sets up the list containing the ornaments, like the painting.
+ */
+//void init_ornaments(scene);
 
 /**
  * Makes a list of everything in the scene that cannot change and has a reflection, then places it in the scene's st_refl object list.
@@ -55,6 +62,11 @@ void draw_man(Man* man);
  * Draws the walls, floors and roof.
  */
 void draw_bounds(const Object* olist);
+
+/**
+ * Draws the ornaments.
+ */
+//void draw_ornaments(const Object ornlist);
 /**
  * Initialize the scene by calling other init functions and setting up textures.
  */

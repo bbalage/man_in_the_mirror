@@ -4,9 +4,10 @@
 * Function to be called to load an object.
 * desc should be an array of doubles which represent:
 */
-Object* load_object(double desc[], Model* model, GLuint tex_id)
+Object* load_object(double desc[], Model* model, GLuint tex_id, Object_types otype)
 {
 	Object* obj = malloc(sizeof(Object));
+	obj->type = otype;
 	obj->model = model;
 	obj->texture_id = tex_id;
 	obj->pos.x = desc[0];

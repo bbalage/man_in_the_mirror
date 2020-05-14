@@ -5,8 +5,10 @@ void init_scene(Scene* scene)
     scene->tex_wall = load_texture("textures/brick3.jpg");
 	scene->tex_floor = load_texture("textures/floor.jpeg");
 	scene->tex_darkcloth = load_texture("textures/darkcloth.jpg");
+	scene->tex_painting = load_texture("textures/painting.png");
 	init_models(scene);
 	init_bounds(scene);
+	//init_ornaments(scene);
 	init_man(&scene->man, scene->tex_darkcloth, &scene->mlist);
 	create_static_reflection(scene);
 	scene->mir_plane.x = 1;
@@ -15,11 +17,19 @@ void init_scene(Scene* scene)
 
 void init_models(Scene* scene){
 	load_model(&scene->mlist.boundmodel, "models/wall.obj");
+	load_model(&scene->mlist.paintingmodel, "models/painting.obj");
 	load_model(&scene->mlist.mlegmodel, "models/mleg.obj");
 	load_model(&scene->mlist.marmmodel, "models/marm.obj");
 	load_model(&scene->mlist.mheadmodel, "models/mhead.obj");
 	load_model(&scene->mlist.mbodymodel, "models/mbody.obj");
+	load_model(&scene->mlist.paintingmodel, "models/painting.obj");
 }
+
+/*void init_ornaments(Scene* scene){
+	Object *obj = &scene->ornlist;
+	double desc[] = {0.25, 0.4, 0.01, 90, 0, 0, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 100};
+	obj->next = load_object(desc, &scene->mlist.paintingmodel, scene->tex_painting);
+} */
 
 void init_bounds(Scene* scene){
 	Object *obj = &scene->olist;
@@ -31,7 +41,7 @@ void init_bounds(Scene* scene){
 				desc[0] = 0.1*j;
 				desc[1] = 0.1*i;
 				desc[2] = 0.1*k;
-				obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_floor);
+				obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_floor, BOUND);
 				obj = obj->next;
 			}
 		}
@@ -42,31 +52,35 @@ void init_bounds(Scene* scene){
 	for(i = 0; i < 6; i++){
 		if(i == 1) break;
 		desc[0] = 0.1*i;
-		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
+		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall, BOUND);
 		obj = obj->next;
 	}
 	desc[1] = 0.6;
 	for(i = 0; i < 6; i++){
-		if(i == 3) continue;
 		desc[0] = 0.1*i;
-		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
+		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall, BOUND);
 		obj = obj->next;
 	}
 	desc[0] = 0;
 	desc[4] = 90;
 	for(i = 0; i < 6; i++){
-		if(i == 3) continue;
 		desc[1] = 0.1*i;
-		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
+		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall, BOUND);
 		obj = obj->next;
 	}
 	desc[0] = 0.6;
 	for(i = 0; i < 6; i++){
-		if(i == 3) continue;
 		desc[1] = 0.1*i;
-		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
+		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall, BOUND);
 		obj = obj->next;
 	}
+	desc[0] = 0.25;
+	desc[1] = 0.59999;
+	desc[2] = 0.025;
+	desc[3] = 90;
+	desc[4] = 0;
+	//0, 0, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 100};
+	obj->next = load_object(desc, &scene->mlist.paintingmodel, scene->tex_painting, PAINTING);
 }
 
 void create_static_reflection(Scene* scene)
@@ -80,9 +94,10 @@ void create_static_reflection(Scene* scene)
 		obj2->next = malloc(sizeof(Object));
 		obj2 = obj2->next;
 		*obj2 = *obj1;
-		obj2->pos.y *= -1;
-		//obj2->pos.y -= 0.2;
-		obj2->rot.x *= -1;
+		switch(obj2->type){
+			case BOUND: obj2->pos.y *= -1; obj2->rot.x *= -1; break;
+			case PAINTING: obj2->pos.y *= -1; break;
+		}
 		//obj2->rot.z *= -1;
 		obj1 = obj1->next;
 	}
@@ -90,6 +105,7 @@ void create_static_reflection(Scene* scene)
 	for(iter = 0; iter < 1; iter++){
 		switch(iter){
 			case 0: md = scene->mlist.boundmodel; rmd = &scene->rmlist.boundmodel; mdp = &scene->mlist.boundmodel; break;
+			case 1: md = scene->mlist.paintingmodel; rmd = &scene->rmlist.paintingmodel; mdp = &scene->mlist.paintingmodel; break;
 		}
 		md.vertices = malloc(sizeof(Vertex)*(md.n_vertices+1));
 		md.texture_vertices = malloc(sizeof(Vertex)*(md.n_texture_vertices+1));
@@ -175,6 +191,7 @@ void draw_scene(Scene* scene)
     set_lighting();
     draw_origin();
     draw_bounds(&(scene->olist));
+	//draw_bounds(&(scene->ornlist));
 	draw_bounds(&(scene->rolist));
 	draw_man(&(scene->man));
 }
