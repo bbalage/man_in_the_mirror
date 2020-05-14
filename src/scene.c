@@ -8,6 +8,9 @@ void init_scene(Scene* scene)
 	init_models(scene);
 	init_bounds(scene);
 	init_man(&scene->man, scene->tex_darkcloth, &scene->mlist);
+	create_static_reflection(scene);
+	scene->mir_plane.x = 1;
+	scene->mir_plane.y = 0;
 }
 
 void init_models(Scene* scene){
@@ -37,12 +40,14 @@ void init_bounds(Scene* scene){
 	desc[3] = 90;
 	for(i = 6; i < 15; i++) desc[i] = 0.5;
 	for(i = 0; i < 6; i++){
+		if(i == 1) break;
 		desc[0] = 0.1*i;
 		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
 		obj = obj->next;
 	}
 	desc[1] = 0.6;
 	for(i = 0; i < 6; i++){
+		if(i == 3) continue;
 		desc[0] = 0.1*i;
 		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
 		obj = obj->next;
@@ -50,15 +55,78 @@ void init_bounds(Scene* scene){
 	desc[0] = 0;
 	desc[4] = 90;
 	for(i = 0; i < 6; i++){
+		if(i == 3) continue;
 		desc[1] = 0.1*i;
 		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
 		obj = obj->next;
 	}
 	desc[0] = 0.6;
 	for(i = 0; i < 6; i++){
+		if(i == 3) continue;
 		desc[1] = 0.1*i;
 		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall);
 		obj = obj->next;
+	}
+}
+
+void create_static_reflection(Scene* scene)
+{
+	Model md;
+	Model *mdp, *rmd;
+	int i, j, iter;
+	Object *obj1 = scene->olist.next, *obj2 = &scene->rolist;
+	printf("Into first loop.\n");
+	while(obj1 != NULL){
+		obj2->next = malloc(sizeof(Object));
+		obj2 = obj2->next;
+		*obj2 = *obj1;
+		obj2->pos.y *= -1;
+		//obj2->pos.y -= 0.2;
+		obj2->rot.x *= -1;
+		//obj2->rot.z *= -1;
+		obj1 = obj1->next;
+	}
+	printf("Out of first loop.\n");
+	for(iter = 0; iter < 1; iter++){
+		switch(iter){
+			case 0: md = scene->mlist.boundmodel; rmd = &scene->rmlist.boundmodel; mdp = &scene->mlist.boundmodel; break;
+		}
+		md.vertices = malloc(sizeof(Vertex)*(md.n_vertices+1));
+		md.texture_vertices = malloc(sizeof(Vertex)*(md.n_texture_vertices+1));
+		md.normals = malloc(sizeof(Vertex)*(md.n_normals+1));
+		md.triangles = malloc(sizeof(Triangle)*(md.n_triangles));
+		printf("Vertices: %d\n", md.n_vertices);
+		for(i = 0; i <= md.n_vertices; i++){
+			*(md.vertices+i) = *(mdp->vertices+i);
+			printf("Vertices:%d\n", i);
+			(*(md.vertices+i)).y = (*(mdp->vertices+i)).y*-1;
+		}
+		for(i = 0; i <= md.n_normals; i++){
+			*(md.normals+i) = *(mdp->normals+i);
+			printf("Normals: %d\n", i);
+			(*(md.normals+i)).y = (*(mdp->normals+i)).y*-1;
+		}
+		for(i = 0; i <= md.n_texture_vertices; i++){
+			*(md.texture_vertices+i) = *(mdp->texture_vertices+i);
+			(*(md.texture_vertices+i)).u = 1-(*(mdp->texture_vertices+i)).u;
+			(*(md.texture_vertices+i)).v = 1-(*(mdp->texture_vertices+i)).v;
+		}
+		for(i = 0; i < md.n_triangles; i++){
+			printf("Triangles:%d\n", i);
+			for(j = 0; j < 3; j++){
+				(*(md.triangles+i)).points[j] = (*(mdp->triangles+i)).points[j];
+			}
+		}
+		(*rmd) = md;
+		obj1 = scene->rolist.next;
+		printf("Into second loop.\n");
+		while(obj1 != NULL){
+			if(obj1->model == mdp){
+				obj1->model = rmd;
+			}
+			obj1 = obj1->next;
+		}
+		printf("Out of second loop.\n");
 	}
 }
 
@@ -102,15 +170,16 @@ void set_material(const Material* material)
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &(material->shininess));
 }
 
-void draw_scene(const Scene* scene)
+void draw_scene(Scene* scene)
 {
     set_lighting();
     draw_origin();
     draw_bounds(&(scene->olist));
+	draw_bounds(&(scene->rolist));
 	draw_man(&(scene->man));
 }
 
-void draw_man(const Man* man)
+void draw_man(Man* man)
 {
 	Object* obj;
 	int i;

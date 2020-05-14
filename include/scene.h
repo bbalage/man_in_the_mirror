@@ -19,19 +19,44 @@ typedef struct Scene
 	GLuint tex_wall;
 	GLuint tex_darkcloth;
 	Model_List mlist;
-    Object olist;
+	Model_List rmlist;
+    Object olist; //the first element of the olist must be blank!
+	Object rolist; //the first element of the olist must be blank!
 	Man man;
+	vec3 mir_plane;
 } Scene;
 
+/**
+ * Sets up a variable for each models located in the scene. Every model is included once.
+ */
 void init_models(Scene* scene);
 
+/**
+ * Sets up the list containing the walls, floor and roof of the scene.
+ */
 void init_bounds(Scene* scene);
 
-void draw_man(const Man* man);
+/**
+ * Makes a list of everything in the scene that cannot change and has a reflection, then places it in the scene's st_refl object list.
+ */
+void create_static_reflection(Scene* scene);
 
+/**
+ * Creates mirrored models for the scene.
+ */
+//void create_mirrored_models(Scene* scene);
+
+/**
+ * Draws the man using the ready data.
+ */
+void draw_man(Man* man);
+
+/**
+ * Draws the walls, floors and roof.
+ */
 void draw_bounds(const Object* olist);
 /**
- * Initialize the scene by loading models.
+ * Initialize the scene by calling other init functions and setting up textures.
  */
 void init_scene(Scene* scene);
 
@@ -48,7 +73,7 @@ void set_material(const Material* material);
 /**
  * Draw the scene objects.
  */
-void draw_scene(const Scene* scene);
+void draw_scene(Scene* scene);
 
 /**
  * Draw the origin of the world coordinate system.

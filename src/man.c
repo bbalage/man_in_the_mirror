@@ -65,7 +65,7 @@ void move_man(Man* man, vec3 newpos)
 		man->leg2 = tmpobj;
 	}
 	srand(time(0));
-	if(rand()%500 < man->change_dir++) set_new_course(man, -1);
+	if(rand()%400 < man->change_dir++) set_new_course(man, -1);
 }
 
 vec3 get_new_man_pos(Man* man)
