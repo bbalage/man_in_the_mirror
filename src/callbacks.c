@@ -124,11 +124,7 @@ void idle()
 	newpos = get_new_camera_pos(&camera, elapsed_time);
 	if(checkhit_wall(newpos, 0.02) && camera.position.x != newpos.x && camera.position.y != newpos.y) {
 		update_camera(&camera, newpos);
-		//newpos change.
-		newpos.x+=0.05;
-		newpos.y+=0.05;
-		newpos.z = START_Z;
-		move_man(&scene.player, newpos, 1);
+		set_man_by_camera(&scene.player, camera.position, camera.rotation);
 	}
 	if(check_if_man_moves(&scene.man,elapsed_time)){
 		newpos = get_new_man_pos(&scene.man);

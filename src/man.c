@@ -106,6 +106,13 @@ int check_if_man_moves(Man* man, double elapsed_time){
 	else return 0;
 }
 
+void set_man_by_camera(Man* man, vec3 campos, vec3 camrot)
+{
+	double camdist = 0.005;
+	man->pos.x = camdist*cos(degree_to_radian(camrot.z))+campos.x;
+	man->pos.y = camdist*sin(degree_to_radian(camrot.z))+campos.y;
+	move_man(man, man->pos, 1);
+}
 /*
 	vec3 pos;
 	vec3 rot;

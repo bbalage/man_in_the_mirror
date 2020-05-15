@@ -29,6 +29,11 @@ typedef struct Man
 } Man;
 
 /**
+ * Function to set the player man according to camera position and rotation.
+ */
+void set_man_by_camera(Man* man, vec3 campos, vec3 camrot);
+
+/**
  * Function to be called to move the man.
  */
 void move_man(Man* man, vec3 newpos, int player);

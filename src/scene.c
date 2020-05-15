@@ -1,19 +1,19 @@
 #include "scene.h"
 
-void init_scene(Scene* scene)
+void init_scene(Scene* scene, Camera camera)
 {
     scene->tex_wall = load_texture("textures/brick3.jpg");
 	scene->tex_floor = load_texture("textures/floor.jpeg");
 	scene->tex_darkcloth = load_texture("textures/darkcloth.jpg");
 	scene->tex_painting = load_texture("textures/painting.png");
+	scene->tex_lightcloth = load_texture("textures/lightcloth.jpeg");
 	init_models(scene);
 	init_bounds(scene);
 	vec3 pos = {0.5,0.5,START_Z};
 	vec3 rot = {0,0,0};
 	init_man(&scene->man, pos, rot, scene->tex_darkcloth, &scene->mlist);
-	pos.x = 0.2+0.05;
-	pos.y = 0.2+0.05;
-	init_man(&scene->player, pos, rot, scene->tex_darkcloth, &scene->mlist);
+	init_man(&scene->player, pos, rot, scene->tex_lightcloth, &scene->mlist);
+	set_man_by_camera(&scene->player, camera.position, camera.rotation);
 	create_static_reflection(scene);
 }
 
@@ -48,7 +48,7 @@ void init_bounds(Scene* scene){
 	desc[3] = 90;
 	for(i = 6; i < 15; i++) desc[i] = 0.5;
 	for(i = 0; i < 6; i++){
-		if(i == 1) break;
+		if(i == 3) continue;
 		desc[0] = 0.1*i;
 		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall, BOUND);
 		obj = obj->next;
@@ -92,7 +92,7 @@ void create_static_reflection(Scene* scene)
 		obj2 = obj2->next;
 		*obj2 = *obj1;
 		switch(obj2->type){
-			case BOUND: obj2->pos.y *= -1; obj2->rot.x *= -1; break;
+			case BOUND: obj2->pos.y = obj2->pos.y*-1-0.0002; obj2->rot.x *= -1; break;
 			case PAINTING: obj2->pos.y *= -1; break;
 		}
 		obj1 = obj1->next;

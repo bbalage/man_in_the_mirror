@@ -10,14 +10,13 @@
 #define WALL_MIN_Y 0
 #define WALL_MAX_Y 0.6
 
-
-
 typedef struct Scene
 {
 	GLuint tex_floor;
 	GLuint tex_wall;
 	GLuint tex_darkcloth;
 	GLuint tex_painting;
+	GLuint tex_lightcloth;
 	Model_List mlist;
     Object olist; //the first element of the olist must be blank!
 	Object rolist; //the first element of the rolist must be blank!
@@ -69,7 +68,7 @@ void draw_bounds(const Object* olist);
 /**
  * Initialize the scene by calling other init functions and setting up textures.
  */
-void init_scene(Scene* scene);
+void init_scene(Scene* scene, Camera camera);
 
 /**
  * Set the lighting of the scene.
