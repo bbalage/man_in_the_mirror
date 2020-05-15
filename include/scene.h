@@ -20,6 +20,7 @@ typedef struct Scene
 	Model_List mlist;
     Object olist; //the first element of the olist must be blank!
 	Object rolist; //the first element of the rolist must be blank!
+	Object glass;
 	Man man;
 	Man refman;
 	Man player;
@@ -37,9 +38,9 @@ void init_models(Scene* scene);
 void init_bounds(Scene* scene);
 
 /**
- * Sets up the list containing the ornaments, like the painting.
+ * Draws the glass representing the mirror.
  */
-//void init_ornaments(scene);
+void draw_glass(Object *glass);
 
 /**
  * Makes a list of everything in the scene that cannot change and has a reflection, then places it in the scene's st_refl object list.
@@ -78,7 +79,7 @@ void set_lighting();
 /**
  * Set the current material.
  */
-void set_material(const Material* material);
+void set_material(const Material* material, float alpha);
 
 /**
  * Draw the scene objects.
@@ -93,12 +94,12 @@ void draw_origin();
 /**
  * Check if the position given with newx and newy would be a hit with any object in the scene.
  */
-int checkhit(Object* olist, vec3 newpos, double precision);
+int checkhit(Man man, vec3 newpos, double precision);
 
 /**
  * Check if the position given with newx and newy would be a hit with static wall boundaries.
  */
-int checkhit_wall(vec3 newpos, double precision);
+//int checkhit_wall(vec3 newpos, double precision);
 /**
  * Move the loaded model.
  */

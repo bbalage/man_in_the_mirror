@@ -48,10 +48,14 @@ void init_bounds(Scene* scene){
 	desc[3] = 90;
 	for(i = 6; i < 15; i++) desc[i] = 0.5;
 	for(i = 0; i < 6; i++){
-		if(i == 3) continue;
 		desc[0] = 0.1*i;
-		obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall, BOUND);
-		obj = obj->next;
+		if(i == 3) {
+			scene->glass = *(load_object(desc, &scene->mlist.boundmodel, scene->tex_floor, BOUND));
+		}
+		else{
+			obj->next = load_object(desc, &scene->mlist.boundmodel, scene->tex_wall, BOUND);
+			obj = obj->next;
+		}
 	}
 	desc[1] = 0.6;
 	for(i = 0; i < 6; i++){
@@ -167,24 +171,27 @@ void set_lighting()
     glLightfv(GL_LIGHT0, GL_POSITION, position);
 }
 
-void set_material(const Material* material)
+void set_material(const Material* material, float alpha)
 {
     float ambient_material_color[] = {
         material->ambient.red,
         material->ambient.green,
-        material->ambient.blue
+        material->ambient.blue,
+		alpha
     };
 
     float diffuse_material_color[] = {
         material->diffuse.red,
         material->diffuse.green,
-        material->diffuse.blue
+        material->diffuse.blue,
+		alpha
     };
 
     float specular_material_color[] = {
         material->specular.red,
         material->specular.green,
-        material->specular.blue
+        material->specular.blue,
+		alpha
     };
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient_material_color);
@@ -205,6 +212,22 @@ void draw_scene(Scene* scene)
 	draw_man(&(scene->man));
 	draw_man(&(scene->player));
 	draw_man(&(scene->refplayer));
+	draw_glass(&(scene->glass));
+}
+
+void draw_glass(Object *glass)
+{
+	glMatrixMode(GL_MODELVIEW);
+    
+	glBindTexture(GL_TEXTURE_2D, glass->texture_id);
+	set_material(&(glass->material), 0.5);
+	glPushMatrix();
+	glTranslatef(glass->pos.x,glass->pos.y,glass->pos.z);
+	glRotatef(glass->rot.x, 1.0, 0, 0);
+	glRotatef(glass->rot.y, 0, 1.0, 0);
+	glRotatef(glass->rot.z, 0, 0, 1.0);
+	draw_model(glass->model);
+	glPopMatrix();
 }
 
 void draw_man(Man* man)
@@ -244,7 +267,7 @@ void draw_bounds(const Object* olist){
     //glLoadIdentity();
 	while(obj != NULL){
 		glBindTexture(GL_TEXTURE_2D, obj->texture_id);
-		set_material(&(obj->material));
+		set_material(&(obj->material), 1.0);
 		glPushMatrix();
 		glTranslatef(obj->pos.x,obj->pos.y,obj->pos.z);
 		glRotatef(obj->rot.x, 1.0, 0, 0);
@@ -275,17 +298,14 @@ void draw_origin()
     glEnd();
 }
 
-int checkhit_wall(vec3 newpos, double precision){
+/*int checkhit_wall(vec3 newpos, double precision){
 	if(newpos.x < WALL_MIN_X + precision || newpos.x > WALL_MAX_X - precision || newpos.y < WALL_MIN_Y + precision || newpos.y > WALL_MAX_Y - precision) return FALSE;
 	return TRUE;
-}
+}*/
 
-int checkhit(Object* olist, vec3 newpos, double precision){
-	Object* obj = olist->next;
-	while(obj != NULL){
-		if(newpos.x < obj->pos.x + precision && newpos.x > obj->pos.x - precision && newpos.y > obj->pos.y - precision && newpos.y < obj->pos.y + precision) return FALSE;
-		obj = obj->next;
-	}
+int checkhit(Man man, vec3 newpos, double precision){
+	if(newpos.x < WALL_MIN_X + precision || newpos.x > WALL_MAX_X - precision || newpos.y < WALL_MIN_Y + precision || newpos.y > WALL_MAX_Y - precision) return FALSE;
+	if(man.pos.x < newpos.x+precision && man.pos.x > newpos.x - precision && man.pos.y < newpos.y+precision && man.pos.y > newpos.y - precision) return FALSE;
 	return TRUE;
 }
 

@@ -122,13 +122,13 @@ void idle()
     last_frame_time = current_time;
 
 	newpos = get_new_camera_pos(&camera, elapsed_time);
-	if(checkhit_wall(newpos, 0.02) && camera.position.x != newpos.x && camera.position.y != newpos.y) {
+	if(checkhit(scene.man, newpos, 0.02) && camera.position.x != newpos.x && camera.position.y != newpos.y) {
 		update_camera(&camera, newpos);
 		set_man_by_camera(&scene.player, camera.position, camera.rotation);
 	}
 	if(check_if_man_moves(&scene.man,elapsed_time)){
 		newpos = get_new_man_pos(&scene.man);
-		if(checkhit_wall(newpos, 0.05)) move_man(&scene.man, newpos, 0);
+		if(checkhit(scene.player, newpos, 0.05)) move_man(&scene.man, newpos, 0);
 		else set_new_course(&scene.man, 10);
 	}
     glutPostRedisplay();
