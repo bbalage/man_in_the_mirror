@@ -3,6 +3,8 @@ This is a hand-in project for the University subject Computer Graphics created w
 
 In the project, a basic reflection making technique is used to mirror a man and the player. There is only one room, with a text, a randomly walking man and the player controlling another person.
 
+Download links for textures and models are in the textures/textures.urls and models/models.urls files. Each link should begin a download.
+
 Usage:
 Use the h button to show help!
 If you use it, the program would provide you the following information:
