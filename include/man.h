@@ -7,7 +7,7 @@
 #define MAN_SLOWDOWN 0.05
 #define START_Z 0.0008
 #define CHANGE_DIR_INIT 0
-#define MAN_WALK_SPEED 0.005
+#define MAN_WALK_SPEED 0.003
 /**
  * A structure representing a man.
  */

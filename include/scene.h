@@ -20,12 +20,10 @@ typedef struct Scene
 	GLuint tex_darkcloth;
 	GLuint tex_painting;
 	Model_List mlist;
-	Model_List rmlist;
     Object olist; //the first element of the olist must be blank!
-	Object ornlist; //the first element of the ornlist must be blank!
 	Object rolist; //the first element of the rolist must be blank!
 	Man man;
-	vec3 mir_plane;
+	Man refman;
 } Scene;
 
 /**

@@ -30,6 +30,9 @@ typedef struct Model_List
 	Model marmmodel;
 	Model mheadmodel;
 	Model mbodymodel;
+	Model refmbodymodel;
+	Model refmheadmodel;
+	Model refboundmodel;
 } Model_List;
 
 /**
