@@ -2,7 +2,7 @@
 
 void init_scene(Scene* scene, Camera camera)
 {
-    scene->tex_wall = load_texture("textures/brick3.jpg");
+    scene->tex_wall = load_texture("textures/brick.jpg");
 	scene->tex_floor = load_texture("textures/floor.jpeg");
 	scene->tex_darkcloth = load_texture("textures/darkcloth.jpg");
 	scene->tex_painting = load_texture("textures/painting.png");
