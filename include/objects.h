@@ -32,12 +32,6 @@ typedef struct Model_List
 	Model mbodymodel;
 	Model refmbodymodel;
 	Model refmheadmodel;
-	/*Model plegmodel;
-	Model parmmodel;
-	Model pheadmodel;
-	Model pbodymodel;
-	Model refpbodymodel;
-	Model refpheadmodel;*/
 	Model refboundmodel;
 } Model_List;
 

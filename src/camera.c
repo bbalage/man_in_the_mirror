@@ -67,14 +67,6 @@ void rotate_camera(Camera* camera, double horizontal, double vertical)
     if (camera->rotation.z > 360.0) {
         camera->rotation.z -= 360.0;
     }
-
-    /*if (camera->rotation.x < 0) {
-        camera->rotation.x += 360.0;
-    }
-
-    if (camera->rotation.x > 360.0) {
-        camera->rotation.x -= 360.0;
-    }*/
 }
 
 void set_camera_speed(Camera* camera, double speed)

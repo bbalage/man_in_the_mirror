@@ -70,16 +70,16 @@ void keyboard(unsigned char key, int x, int y)
 {
     switch (key) {
     case 'w':
-        set_camera_speed(&camera, WALK_SPEED);
+        set_camera_speed(&camera, PLAYER_WALK_SPEED);
         break;
     case 's':
-        set_camera_speed(&camera, -WALK_SPEED);
+        set_camera_speed(&camera, -PLAYER_WALK_SPEED);
         break;
     case 'a':
-        set_camera_side_speed(&camera, WALK_SPEED);
+        set_camera_side_speed(&camera, PLAYER_WALK_SPEED);
         break;
     case 'd':
-        set_camera_side_speed(&camera, -WALK_SPEED);
+        set_camera_side_speed(&camera, -PLAYER_WALK_SPEED);
         break;
 	case 'h':
         if (is_help_visible) {

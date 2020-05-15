@@ -50,11 +50,6 @@ void draw_glass(Object *glass);
 void create_static_reflection(Scene* scene);
 
 /**
- * Creates mirrored models for the scene.
- */
-//void create_mirrored_models(Scene* scene);
-
-/**
  * Draws the man using the ready data.
  */
 void draw_man(Man* man);
@@ -64,10 +59,6 @@ void draw_man(Man* man);
  */
 void draw_bounds(const Object* olist);
 
-/**
- * Draws the ornaments.
- */
-//void draw_ornaments(const Object ornlist);
 /**
  * Initialize the scene by calling other init functions and setting up textures.
  */
@@ -94,16 +85,8 @@ void draw_scene(Scene* scene);
 void draw_origin();
 
 /**
- * Check if the position given with newx and newy would be a hit with any object in the scene.
+ * Check if the position given with newx and newy would be a hit with the static boundaries or the other man.
  */
 int checkhit(Man man, vec3 newpos, double precision);
 
-/**
- * Check if the position given with newx and newy would be a hit with static wall boundaries.
- */
-//int checkhit_wall(vec3 newpos, double precision);
-/**
- * Move the loaded model.
- */
-void move_model(Model* model, double xm, double ym, double zm);
 #endif /* SCENE_H */

@@ -83,7 +83,6 @@ void init_bounds(Scene* scene){
 	desc[2] = 0.024;
 	desc[3] = 90;
 	desc[4] = 0;
-	//0, 0, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 100};
 	obj->next = load_object(desc, &scene->mlist.paintingmodel, scene->tex_painting, PAINTING);
 }
 
@@ -92,7 +91,6 @@ void create_static_reflection(Scene* scene)
 	Model md;
 	int i, j;
 	Object *obj1 = scene->olist.next, *obj2 = &scene->rolist;
-	printf("Into first loop.\n");
 	while(obj1 != NULL){
 		obj2->next = malloc(sizeof(Object));
 		obj2 = obj2->next;
@@ -100,10 +98,10 @@ void create_static_reflection(Scene* scene)
 		switch(obj2->type){
 			case BOUND: obj2->pos.y = obj2->pos.y*-1-0.0002; obj2->rot.x *= -1; break;
 			case PAINTING: obj2->pos.y *= -1; break;
+			//Case of the man should be impossible in this program structure.
 		}
 		obj1 = obj1->next;
 	}
-	printf("Out of first loop.\n");
 	md = scene->mlist.boundmodel;
 	md.vertices = malloc(sizeof(Vertex)*(md.n_vertices+1));
 	md.texture_vertices = malloc(sizeof(Vertex)*(md.n_texture_vertices+1));
@@ -111,12 +109,10 @@ void create_static_reflection(Scene* scene)
 	md.triangles = malloc(sizeof(Triangle)*(md.n_triangles));
 	for(i = 0; i <= md.n_vertices; i++){
 		*(md.vertices+i) = *(scene->mlist.boundmodel.vertices+i);
-		printf("Vertices:%d\n", i);
 		(*(md.vertices+i)).y = (*(scene->mlist.boundmodel.vertices+i)).y*-1;
 	}
 	for(i = 0; i <= md.n_normals; i++){
 		*(md.normals+i) = *(scene->mlist.boundmodel.normals+i);
-		printf("Normals: %d\n", i);
 		(*(md.normals+i)).y = (*(scene->mlist.boundmodel.normals+i)).y*-1;
 	}
 	for(i = 0; i <= md.n_texture_vertices; i++){
@@ -125,22 +121,18 @@ void create_static_reflection(Scene* scene)
 		(*(md.texture_vertices+i)).v = 1-(*(scene->mlist.boundmodel.texture_vertices+i)).v;
 	}
 	for(i = 0; i < md.n_triangles; i++){
-		printf("Triangles:%d\n", i);
 		for(j = 0; j < 3; j++){
 			(*(md.triangles+i)).points[j] = (*(scene->mlist.boundmodel.triangles+i)).points[j];
 		}
 	}
 	scene->mlist.refboundmodel = md;
 	obj1 = scene->rolist.next;
-	printf("Inited model.\n");
-	printf("Into second loop.\n");
 	while(obj1 != NULL){
 		if(obj1->model == &scene->mlist.boundmodel){
 			obj1->model = &scene->mlist.refboundmodel;
 		}
 		obj1 = obj1->next;
 	}
-	printf("Out of second loop.\n");
 }
 
 void create_dynamic_reflection(Scene* scene){
@@ -206,7 +198,7 @@ void set_material(const Material* material, float alpha)
 void draw_scene(Scene* scene)
 {
     set_lighting(scene->light, scene->light, scene->light, scene->light);
-    draw_origin();
+    //draw_origin();
     draw_bounds(&(scene->olist));
 	draw_bounds(&(scene->rolist));
 	create_dynamic_reflection(scene);
@@ -266,7 +258,6 @@ void draw_man(Man* man)
 void draw_bounds(const Object* olist){
 	Object *obj = olist->next;
 	glMatrixMode(GL_MODELVIEW);
-    //glLoadIdentity();
 	while(obj != NULL){
 		glBindTexture(GL_TEXTURE_2D, obj->texture_id);
 		set_material(&(obj->material), 1.0);
@@ -281,7 +272,7 @@ void draw_bounds(const Object* olist){
 	}
 }
 
-void draw_origin()
+/*void draw_origin()
 {
     glBegin(GL_LINES);
 
@@ -298,26 +289,11 @@ void draw_origin()
     glVertex3f(0, 0, 1);
 
     glEnd();
-}
-
-/*int checkhit_wall(vec3 newpos, double precision){
-	if(newpos.x < WALL_MIN_X + precision || newpos.x > WALL_MAX_X - precision || newpos.y < WALL_MIN_Y + precision || newpos.y > WALL_MAX_Y - precision) return FALSE;
-	return TRUE;
 }*/
+
 
 int checkhit(Man man, vec3 newpos, double precision){
 	if(newpos.x < WALL_MIN_X + precision || newpos.x > WALL_MAX_X - precision || newpos.y < WALL_MIN_Y + precision || newpos.y > WALL_MAX_Y - precision) return FALSE;
 	if(man.pos.x < newpos.x+precision && man.pos.x > newpos.x - precision && man.pos.y < newpos.y+precision && man.pos.y > newpos.y - precision) return FALSE;
 	return TRUE;
-}
-
-void move_model(Model* model, double xm, double ym, double zm)
-{
-    int i;
-    
-    for (i = 0; i < model->n_vertices; i++) {
-        model->vertices[i].x += xm;
-        model->vertices[i].y += ym;
-        model->vertices[i].z += zm;
-    }
 }

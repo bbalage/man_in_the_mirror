@@ -2,7 +2,7 @@
 
 /**
 * Function to be called to load an object.
-* desc should be an array of doubles which represent:
+* desc should be an array of doubles.
 */
 Object* load_object(double desc[], Model* model, GLuint tex_id, Object_types otype)
 {

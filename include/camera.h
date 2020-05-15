@@ -54,7 +54,13 @@ void set_camera_speed(Camera* camera, double speed);
  */
 void set_camera_side_speed(Camera* camera, double speed);
 
+/**
+ * Function supposed to write letters to the screen.
+ */
 //void show_help(Camera camera);
 
-
+/**
+ * Shows a picture of the current bound texture in the middle of the screen.
+ */
+void show_texture_preview();
 #endif /* CAMERA_H */

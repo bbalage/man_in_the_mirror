@@ -113,13 +113,3 @@ void set_man_by_camera(Man* man, vec3 campos, vec3 camrot)
 	man->pos.y = camdist*sin(degree_to_radian(camrot.z))+campos.y;
 	move_man(man, man->pos, 1);
 }
-/*
-	vec3 pos;
-	vec3 rot;
-	Object leg1;
-	Object leg2;
-	Object head;
-	Object arm1;
-	Object arm2;
-	Object torso;
-*/
