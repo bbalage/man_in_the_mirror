@@ -2,10 +2,8 @@
 
 #include "utils.h"
 
-void init_man(Man* man, GLuint tex_id, Model_List* mlist)
+void init_man(Man* man, vec3 pos, vec3 rot, GLuint tex_id, Model_List* mlist)
 {
-	vec3 pos = {0.5,0.5,0};
-	vec3 rot = {0,0,START_Z};
 	man->pos = pos;
 	man->rot = rot;
 	man->nextrot = rot;
@@ -33,17 +31,18 @@ void init_man(Man* man, GLuint tex_id, Model_List* mlist)
 	man->arm2 = *(load_object(desc, &mlist->marmmodel, tex_id, MAN)); //trimmed to 0.045
 }
 
-void move_man(Man* man, vec3 newpos)
+void move_man(Man* man, vec3 newpos, int player)
 {
 	Object tmpobj;
 	double newz, rotshift, xshift;
 	man->pos = newpos;
-	switch(man->dir){
+	if(!player)
+		switch(man->dir){
 		case 0: man->rot.z=0; break;
 		case 1: man->rot.z=90; break;
 		case 2: man->rot.z=180; break;
 		case 3: man->rot.z=-90; break;
-	}
+		}
 	if(man->movephase != TOP_MOVE_PHASE){
 		man->movephase++;
 		rotshift = 1.5;
@@ -64,8 +63,10 @@ void move_man(Man* man, vec3 newpos)
 		man->leg1 = man->leg2;
 		man->leg2 = tmpobj;
 	}
-	srand(time(0));
-	if(rand()%400 < man->change_dir++) set_new_course(man, -1);
+	if(!player){
+		srand(time(0));
+		if(rand()%400 < man->change_dir++) set_new_course(man, -1);
+	}
 }
 
 vec3 get_new_man_pos(Man* man)

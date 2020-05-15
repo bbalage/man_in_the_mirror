@@ -59,6 +59,8 @@ void mouse(int button, int state, int x, int y)
 void motion(int x, int y)
 {
     rotate_camera(&camera, (mouse_position.x - x)/2, (mouse_position.y - y)/2);
+	//scene.player.rot.x = camera.rotation.x;
+	scene.player.rot.z = camera.rotation.z;
     mouse_position.x = x;
     mouse_position.y = y;
     glutPostRedisplay();
@@ -120,10 +122,17 @@ void idle()
     last_frame_time = current_time;
 
 	newpos = get_new_camera_pos(&camera, elapsed_time);
-	if(checkhit_wall(newpos, 0.02)) update_camera(&camera, newpos);
+	if(checkhit_wall(newpos, 0.02) && camera.position.x != newpos.x && camera.position.y != newpos.y) {
+		update_camera(&camera, newpos);
+		//newpos change.
+		newpos.x+=0.05;
+		newpos.y+=0.05;
+		newpos.z = START_Z;
+		move_man(&scene.player, newpos, 1);
+	}
 	if(check_if_man_moves(&scene.man,elapsed_time)){
 		newpos = get_new_man_pos(&scene.man);
-		if(checkhit_wall(newpos, 0.05)) move_man(&scene.man, newpos);
+		if(checkhit_wall(newpos, 0.05)) move_man(&scene.man, newpos, 0);
 		else set_new_course(&scene.man, 10);
 	}
     glutPostRedisplay();

@@ -8,7 +8,12 @@ void init_scene(Scene* scene)
 	scene->tex_painting = load_texture("textures/painting.png");
 	init_models(scene);
 	init_bounds(scene);
-	init_man(&scene->man, scene->tex_darkcloth, &scene->mlist);
+	vec3 pos = {0.5,0.5,START_Z};
+	vec3 rot = {0,0,0};
+	init_man(&scene->man, pos, rot, scene->tex_darkcloth, &scene->mlist);
+	pos.x = 0.2+0.05;
+	pos.y = 0.2+0.05;
+	init_man(&scene->player, pos, rot, scene->tex_darkcloth, &scene->mlist);
 	create_static_reflection(scene);
 }
 
@@ -138,15 +143,13 @@ void create_dynamic_reflection(Scene* scene){
 	*refman = man;
 	refman->pos.y = man.pos.y*-1;
 	refman->rot.z =man.rot.z*-1;
-	//refman->pos.x = man.pos.x;
-	//refman->pos.y = man.pos.y*-1;
-	//refman->pos.z = man.pos.z;
-	//refman->rot.x =man.rot.x;
-	//refman->rot.y =man.rot.y;
-	//refman->leg1.model = &scene->mlist.mlegmodel;
-	//refman->leg2.model = &scene->mlist.mlegmodel;
-	//refman->arm1.model = &scene->mlist.marmmodel;
-	//refman->arm2.model = &scene->mlist.marmmodel;
+	refman->head.model = &scene->mlist.refmheadmodel;
+	refman->body.model = &scene->mlist.refmbodymodel;
+	man = scene->player;
+	refman = &scene->refplayer;
+	*refman = man;
+	refman->pos.y = man.pos.y*-1;
+	refman->rot.z =man.rot.z*-1;
 	refman->head.model = &scene->mlist.refmheadmodel;
 	refman->body.model = &scene->mlist.refmbodymodel;
 }
@@ -200,6 +203,8 @@ void draw_scene(Scene* scene)
 	create_dynamic_reflection(scene);
 	draw_man(&(scene->refman));
 	draw_man(&(scene->man));
+	draw_man(&(scene->player));
+	draw_man(&(scene->refplayer));
 }
 
 void draw_man(Man* man)

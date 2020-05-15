@@ -14,7 +14,6 @@
 
 typedef struct Scene
 {
-    Camera camera;
 	GLuint tex_floor;
 	GLuint tex_wall;
 	GLuint tex_darkcloth;
@@ -24,6 +23,8 @@ typedef struct Scene
 	Object rolist; //the first element of the rolist must be blank!
 	Man man;
 	Man refman;
+	Man player;
+	Man refplayer;
 } Scene;
 
 /**

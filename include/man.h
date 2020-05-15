@@ -31,7 +31,7 @@ typedef struct Man
 /**
  * Function to be called to move the man.
  */
-void move_man(Man* man, vec3 newpos);
+void move_man(Man* man, vec3 newpos, int player);
 
 /**
  * Function to be called to determine man's next position and rotation.
@@ -50,5 +50,5 @@ void set_new_course(Man* man, int chmod);
 /**
  * Function for initializing a man.
  */
-void init_man(Man* man, GLuint tex_id, Model_List* mlist);
+void init_man(Man* man, vec3 pos, vec3 rot, GLuint tex_id, Model_List* mlist);
 #endif
