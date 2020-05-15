@@ -18,9 +18,10 @@ void display()
     draw_scene(&scene);
     glPopMatrix();
 
-    if (is_preview_visible) {
-        show_texture_preview();
-    }
+	if (is_help_visible){
+		glBindTexture(GL_TEXTURE_2D, scene.tex_help);
+		show_texture_preview();
+	}
 
     glutSwapBuffers();
 }
@@ -59,7 +60,6 @@ void mouse(int button, int state, int x, int y)
 void motion(int x, int y)
 {
     rotate_camera(&camera, (mouse_position.x - x)/2, (mouse_position.y - y)/2);
-	//scene.player.rot.x = camera.rotation.x;
 	scene.player.rot.z = camera.rotation.z;
     mouse_position.x = x;
     mouse_position.y = y;
@@ -81,12 +81,12 @@ void keyboard(unsigned char key, int x, int y)
     case 'd':
         set_camera_side_speed(&camera, -WALK_SPEED);
         break;
-    case 't':
-        if (is_preview_visible) {
-            is_preview_visible = FALSE;
+	case 'h':
+        if (is_help_visible) {
+            is_help_visible = FALSE;
         }
         else {
-            is_preview_visible = TRUE;
+            is_help_visible = TRUE;
         }
         break;
     }

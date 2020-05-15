@@ -7,6 +7,7 @@ void init_scene(Scene* scene, Camera camera)
 	scene->tex_darkcloth = load_texture("textures/darkcloth.jpg");
 	scene->tex_painting = load_texture("textures/painting.png");
 	scene->tex_lightcloth = load_texture("textures/lightcloth.jpeg");
+	scene->tex_help = load_texture("textures/help.png");
 	init_models(scene);
 	init_bounds(scene);
 	vec3 pos = {0.5,0.5,START_Z};

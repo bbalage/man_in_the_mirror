@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
     init_camera(&camera);
 	init_scene(&scene, camera);
     set_callbacks();
-
+	
     glutMainLoop();
 
     return 0;

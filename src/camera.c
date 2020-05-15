@@ -16,7 +16,7 @@ void init_camera(Camera* camera)
     camera->speed.y = 0.0;
     camera->speed.z = 0.0;
 
-    is_preview_visible = FALSE;
+    is_help_visible = FALSE;
 }
 
 void update_camera(Camera* camera, vec3 newpos){
@@ -87,6 +87,19 @@ void set_camera_side_speed(Camera* camera, double speed)
     camera->speed.x = speed;
 }
 
+/*void show_help(Camera camera)
+{
+	int i, len;
+	char text[] = "This is my help text.";
+	len = strlen(text);
+	glColor3f(0,0,1.0);
+	glRasterPos3f(camera.position.x+0.01, camera.position.y+0.01, camera.position.z+0.01);
+	for(i = 0; i < len; i++){
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, text[i]);
+		//printf(" %c",text[i]);
+	}
+}*/
+
 void show_texture_preview()
 {
     glDisable(GL_LIGHTING);
@@ -100,13 +113,13 @@ void show_texture_preview()
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0);
-    glVertex3f(-1, 1, -3);
+    glVertex3f(-1.5, 1, -3);
     glTexCoord2f(1, 0);
-    glVertex3f(1, 1, -3);
+    glVertex3f(1.5, 1, -3);
     glTexCoord2f(1, 1);
-    glVertex3f(1, -1, -3);
+    glVertex3f(1.5, -1, -3);
     glTexCoord2f(0, 1);
-    glVertex3f(-1, -1, -3);
+    glVertex3f(-1.5, -1, -3);
     glEnd();
 
     glDisable(GL_COLOR_MATERIAL);

@@ -17,6 +17,7 @@ typedef struct Scene
 	GLuint tex_darkcloth;
 	GLuint tex_painting;
 	GLuint tex_lightcloth;
+	GLuint tex_help;
 	Model_List mlist;
     Object olist; //the first element of the olist must be blank!
 	Object rolist; //the first element of the rolist must be blank!

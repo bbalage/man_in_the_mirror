@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <time.h>
+#include <string.h>
 #define FALSE 0
 #define TRUE 1
 #define WALK_SPEED 0.2

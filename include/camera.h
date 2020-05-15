@@ -17,7 +17,7 @@ typedef struct Camera
 /**
  * Is the texture preview visible?
  */
-int is_preview_visible;
+int is_help_visible;
 
 /**
  * Initialize the camera to the start position.
@@ -53,5 +53,8 @@ void set_camera_speed(Camera* camera, double speed);
  * Set the speed of left and right side steps.
  */
 void set_camera_side_speed(Camera* camera, double speed);
+
+//void show_help(Camera camera);
+
 
 #endif /* CAMERA_H */
