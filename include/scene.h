@@ -26,6 +26,7 @@ typedef struct Scene
 	Man refman;
 	Man player;
 	Man refplayer;
+	float light;
 } Scene;
 
 /**
@@ -75,7 +76,7 @@ void init_scene(Scene* scene, Camera camera);
 /**
  * Set the lighting of the scene.
  */
-void set_lighting();
+void set_lighting(float r, float g, float b, float alpha);
 
 /**
  * Set the current material.

@@ -89,7 +89,13 @@ void keyboard(unsigned char key, int x, int y)
             is_help_visible = TRUE;
         }
         break;
-    }
+	case '+':
+		if(scene.light<1) scene.light+=0.02;
+		break;
+	case '-':
+		if(scene.light>0) scene.light-=0.02;
+		break;
+	}
 
     glutPostRedisplay();
 }

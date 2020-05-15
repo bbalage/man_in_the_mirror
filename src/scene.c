@@ -8,6 +8,7 @@ void init_scene(Scene* scene, Camera camera)
 	scene->tex_painting = load_texture("textures/painting.png");
 	scene->tex_lightcloth = load_texture("textures/lightcloth.jpeg");
 	scene->tex_help = load_texture("textures/help.png");
+	scene->light = 0.5f;
 	init_models(scene);
 	init_bounds(scene);
 	vec3 pos = {0.5,0.5,START_Z};
@@ -159,12 +160,12 @@ void create_dynamic_reflection(Scene* scene){
 	refman->body.model = &scene->mlist.refmbodymodel;
 }
 
-void set_lighting()
+void set_lighting(float r, float g, float b, float alpha)
 {
-    float ambient_light[] = { 0.5f, 0.5f, 0.5f, 0.5f };
-    float diffuse_light[] = { 0.5f, 0.5f, 0.5, 0.5f };
-    float specular_light[] = { 0.5f, 0.5f, 0.5f, 0.5f };
-    float position[] = { 0.0f, 0.0f, 10.0f, 1.0f };
+    float ambient_light[] = { r, g, b, alpha };
+    float diffuse_light[] = { r, g, b, alpha };
+    float specular_light[] = { r, g, b, alpha };
+    float position[] = { r, g, b, alpha };
 
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light);
@@ -204,7 +205,7 @@ void set_material(const Material* material, float alpha)
 
 void draw_scene(Scene* scene)
 {
-    set_lighting();
+    set_lighting(scene->light, scene->light, scene->light, scene->light);
     draw_origin();
     draw_bounds(&(scene->olist));
 	draw_bounds(&(scene->rolist));
